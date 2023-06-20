@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -115,6 +116,26 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:{
+                if(permissions.length > 0 && permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    IntentService.startService(MainActivity.this, url.getText().toString());
+                }else{
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            default:
+                Log.v("Request code", "Unknown request code");
+                break;
+        }
     }
 
     @Override
